@@ -46,7 +46,7 @@ export const Dot = styled.div<DotProps>`
   height: 10px;
   width: 10px;
   margin: 0 5px;
-  background-color: ${(props) => (props.isActive ? "#fff" : "rgba(255, 255, 255, 0.5)")};
+  background-color: ${(props) => (props.isActive ? "#F46D1B" : "rgba(255, 255, 255, 0.5)")};
   border-radius: 50%;
   cursor: pointer;
 

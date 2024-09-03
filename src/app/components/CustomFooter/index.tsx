@@ -2,7 +2,11 @@ import React from "react";
 import { ButtonFooter, Footer, FooterContent, TextContainer, TextFooter } from "./styles";
 import Link from "next/link";
 
-export default function CustomFooter() {
+interface CustomFooterProps {
+  onViewAllClick: () => void;
+}
+
+export default function CustomFooter({ onViewAllClick }: CustomFooterProps) {
   return (
     <>
       <Footer>
@@ -12,14 +16,14 @@ export default function CustomFooter() {
             <p>Ainda está procurando algo pra assistir?</p>
             <span>Confira o nosso acervo completo</span>
           </TextContainer>
-          <Link href="/categories">
-              <ButtonFooter>Ver tudo</ButtonFooter>
-          </Link>
+        <Link href="/categories">
+            <ButtonFooter onClick={onViewAllClick}>Ver tudo</ButtonFooter>
+            </Link>
         </FooterContent>
-          <TextFooter>
+        <TextFooter>
           <p>© 2024 FPR Animes - Todos os direitos reservados</p>
           <img src="./icon.png" alt="" />
-          </TextFooter>
+        </TextFooter>
       </Footer>
     </>
   );

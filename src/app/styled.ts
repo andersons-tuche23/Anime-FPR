@@ -4,6 +4,14 @@ export const Container = styled.div`
 display: flex;
 flex-direction: column;
 `;
+export const Background = styled.div`
+  background-image: url(${"./banner.png"});
+  background-repeat: no-repeat;
+  height: 29rem;
+  background-size: cover;
+  width: 100%;
+`;
+
 
 export const ItemContainer = styled.div`
   display: flex;
@@ -15,6 +23,7 @@ export const ItemContainer = styled.div`
   img {
     width: 226px;
     height: 319px;
+    cursor: pointer;
   }
 `;
 

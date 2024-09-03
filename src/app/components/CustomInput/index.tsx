@@ -2,13 +2,25 @@
 import React from "react";
 import { Input, InputContainer } from "./styles";
 
-export default function CustomInput() {
-  return (
-    <>
-      <InputContainer>
-      <img src="./logo.png" alt="" />
-        <Input type="text" placeholder="Buscar" />
-      </InputContainer>
-    </>
-  );
+interface CustomInputProps {
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
 }
+
+const CustomInput: React.FC<CustomInputProps> = ({ value, onChange, onKeyDown }) => {
+  return (
+    <InputContainer>
+      <img src="./logo.png" alt="" />
+      <Input
+        type="text"
+        placeholder="Buscar"
+        value={value}
+        onChange={onChange}
+        onKeyDown={onKeyDown}
+      />
+    </InputContainer>
+  );
+};
+
+export default CustomInput;

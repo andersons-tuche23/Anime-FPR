@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, ChangeEvent, useRef } from "react";
+import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
 import Sidebar from "../components/SideBar";
 import CustomInput from "../components/CustomInput";
@@ -30,9 +31,13 @@ export default function Sinopes() {
   const [averageRating, setAverageRating] = useState<string | null>(null);
   const [ratingRank, setRatingRank] = useState<string | null>(null);
   const [popularityRank, setPopularityRank] = useState<string | null>(null);
+  const [search, setSearch] = useState<string>(""); 
+  const [searchText, setSearchText] = useState<string>(""); 
 
+  const router = useRouter();
   const searchParams = useSearchParams();
   const animeId = searchParams.get("animeId");
+  const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     if (animeId) {
@@ -46,9 +51,9 @@ export default function Sinopes() {
           if (data.data) {
             const anime = data.data.attributes;
             setYoutubeVideoId(anime.youtubeVideoId);
-            setBannerImage(anime.coverImage.tiny);
-            setPosterImage(anime.posterImage.small);
-            setLargeImage(anime.coverImage.large);
+            setBannerImage(anime.coverImage?.tiny);
+            setPosterImage(anime.posterImage?.small);
+            setLargeImage(anime.coverImage?.large);
             setDescription(anime.description);
             setSynopsis(anime.synopsis);
             setTitles(anime.titles);
@@ -74,11 +79,47 @@ export default function Sinopes() {
     setShowModal(false);
   };
 
+  const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setSearch(e.target.value);
+  };
+
+  
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      setSearchText(search);
+      router.push(`/categories?view=${encodeURIComponent(search)}`);
+    }
+  };
+
+  useEffect(() => {
+    if (debounceTimeout.current) {
+      clearTimeout(debounceTimeout.current);
+    }
+
+    debounceTimeout.current = setTimeout(() => {
+      setSearchText(search);
+    }, 500 ); 
+
+    return () => {
+      if (debounceTimeout.current) {
+        clearTimeout(debounceTimeout.current);
+      }
+    };
+  }, [search]);
+
+  const handleCategorySelect = (title: string) => {
+    router.push(`/categories?view=${encodeURIComponent(title)}`);
+  };
+
   return (
     <>
       <BackTransparent>
-        <Sidebar />
-        <CustomInput />
+        <Sidebar onCategorySelect={handleCategorySelect} />
+        <CustomInput
+          value={search}
+          onChange={handleSearchChange}
+          onKeyDown={handleKeyDown}
+        />
         {bannerImage && (
           <img
             src={bannerImage}
@@ -96,54 +137,51 @@ export default function Sinopes() {
         )}
       </BackTransparent>
       <div>
-        <div>
-          <Teste>
-            <ButtonContainer>
-              {posterImage && (
-                <img
-                  src={posterImage}
-                  alt="Anime Poster Large"
-                  style={{
-                    width: "221px",
-                    height: "313px",
-                    objectFit: "cover",
-                  }}
-                />
-              )}
-              <TubeButton onClick={handleOpenModal}>
-                <ButtonContent>
-                  <img src="/button.png" alt="" />
-                  VER TRAILER
-                </ButtonContent>
-              </TubeButton>
-              <AproveText>Aprovado {averageRating}% da comunidade</AproveText>
-              <HeartImage>
-                <img src="/heart.png" alt="" />
-                <p>#{popularityRank} Mais Popular</p>
-              </HeartImage>
-              <StarImage>
-                <img src="/star.png" alt="" />
-                <p>#{ratingRank} Melhor classificado</p>
-              </StarImage>
-            </ButtonContainer>
-            {showModal && youtubeVideoId && (
-              <CustomModal showModal={showModal} onClose={handleCloseModal}>
-                <iframe
-                  width="800"
-                  height="450"
-                  src={`https://www.youtube.com/embed/${youtubeVideoId}`}
-                  title="YouTube Video"
-                ></iframe>
-              </CustomModal>
+        <Teste>
+          <ButtonContainer>
+            {posterImage && (
+              <img
+                src={posterImage}
+                alt="Anime Poster Large"
+                style={{
+                  width: "221px",
+                  height: "313px",
+                  objectFit: "cover",
+                }}
+              />
             )}
-            <div>
-              <h1>{canonicalTitle}</h1>
-              <p style={{ width: "855px", height: "50px" }}>{synopsis}</p>
-            </div>
-          </Teste>
-        </div>
-
-        <CustomFooter />
+            <TubeButton onClick={handleOpenModal}>
+              <ButtonContent>
+                <img src="/button.png" alt="" />
+                VER TRAILER
+              </ButtonContent>
+            </TubeButton>
+            <AproveText>Aprovado {averageRating}% da comunidade</AproveText>
+            <HeartImage>
+              <img src="/heart.png" alt="" />
+              <p>#{popularityRank} Mais Popular</p>
+            </HeartImage>
+            <StarImage>
+              <img src="/star.png" alt="" />
+              <p>#{ratingRank} Melhor classificado</p>
+            </StarImage>
+          </ButtonContainer>
+          {showModal && youtubeVideoId && (
+            <CustomModal showModal={showModal} onClose={handleCloseModal}>
+              <iframe
+                width="800"
+                height="450"
+                src={`https://www.youtube.com/embed/${youtubeVideoId}`}
+                title="YouTube Video"
+              ></iframe>
+            </CustomModal>
+          )}
+          <div>
+            <h1>{canonicalTitle}</h1>
+            <p style={{ width: "855px", height: "50px" }}>{synopsis}</p>
+          </div>
+        </Teste>
+        <CustomFooter onViewAllClick={() => {}} />
       </div>
     </>
   );

@@ -1,9 +1,11 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Sidebar from "../components/SideBar";
 import CustomInput from "../components/CustomInput";
 import {
   BackgroundColor,
+  CategoryTitle,
   FooterPrincipal,
   ImageContainer,
   PaginationContainer,
@@ -45,11 +47,16 @@ interface Attributes {
 }
 
 export default function Categories() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const searchText = searchParams.get('view') || ''; 
   const [data, setData] = useState<Item[] | null>(null);
   const [links, setLinks] = useState<Links | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [modalTimer, setModalTimer] = useState<NodeJS.Timeout | null>(null);
+  const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
+  const [inputValue, setInputValue] = useState<string>(searchText);
 
   const fetchData = (url: string) => {
     setIsLoading(true);
@@ -62,7 +69,6 @@ export default function Categories() {
     fetch(url)
       .then((response) => response.json())
       .then((data: ApiResponse) => {
-        console.log('Fetched Data:', data); 
         setData(data.data);
         setLinks(data.links);
       })
@@ -75,10 +81,28 @@ export default function Categories() {
   };
 
   useEffect(() => {
-    fetchData(
-      `https://kitsu.io/api/edge/anime?filter[categories]=&sort=popularityRank&page[limit]=20&page[offset]=0`
-    );
-  }, []);
+    if (debounceTimeout.current) {
+      clearTimeout(debounceTimeout.current);
+    }
+
+    debounceTimeout.current = setTimeout(() => {
+      let url = `https://kitsu.io/api/edge/anime?sort=popularityRank&page[limit]=20&page[offset]=0`;
+
+      if (searchText) {
+        url = `https://kitsu.io/api/edge/anime?filter[text]=${encodeURIComponent(
+          searchText
+        )}&sort=popularityRank&page[limit]=20&page[offset]=0`;
+      }
+
+      fetchData(url);
+    }, 700);
+
+    return () => {
+      if (debounceTimeout.current) {
+        clearTimeout(debounceTimeout.current);
+      }
+    };
+  }, [searchText]);
 
   const handleNextPage = () => {
     if (links?.next) {
@@ -87,17 +111,47 @@ export default function Categories() {
   };
 
   const handlePrevPage = () => {
-    if (links?.first) {
-      fetchData(links.first);
+    if (links?.prev) {
+      fetchData(links.prev);
     }
   };
 
+  const handleViewAllClick = () => {
+    router.push("/categories?view=all");
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value); 
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      router.push(`/categories?view=${encodeURIComponent(inputValue)}`);
+    }
+  };
+
+
   return (
     <>
-      <Sidebar />
+      <Sidebar
+        onCategorySelect={(title) => {
+          router.push(`/categories?view=${encodeURIComponent(title)}`);
+        }}
+      />
       <BackgroundColor>
-        <CustomInput />
+        <CustomInput
+         value={inputValue}
+         onChange={handleInputChange}
+         onKeyDown={handleKeyDown}
+        />
       </BackgroundColor>
+
+      {searchText && (
+        <CategoryTitle>
+          <img src="/film.png" alt="image_film" />
+          <h2>{searchText}</h2>
+        </CategoryTitle>
+      )}
 
       {showModal && isLoading && (
         <CustomModal showModal={showModal} onClose={() => setShowModal(false)}>
@@ -106,6 +160,7 @@ export default function Categories() {
           </div>
         </CustomModal>
       )}
+
       <ImageContainer>
         {data &&
           data.map((item) => (
@@ -131,7 +186,7 @@ export default function Categories() {
       </ImageContainer>
 
       <PaginationContainer>
-        <button onClick={handlePrevPage} disabled={!links?.first}>
+        <button onClick={handlePrevPage} disabled={!links?.prev}>
           <FiArrowLeft size={20} />
         </button>
         <button onClick={handleNextPage} disabled={!links?.next}>
@@ -140,7 +195,7 @@ export default function Categories() {
       </PaginationContainer>
 
       <FooterPrincipal>
-        <CustomFooter />
+        <CustomFooter onViewAllClick={handleViewAllClick} />
       </FooterPrincipal>
     </>
   );

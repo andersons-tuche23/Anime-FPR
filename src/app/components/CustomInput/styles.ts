@@ -12,10 +12,12 @@ export const Input = styled.input`
   background-position: calc(100% - 10px) center;
   background-size: 16px;
   margin-top: 2rem;
+  padding-left:12px ;
+  color: #fff;
 
 
-  ::placeholder {
-    color: red;
+  &::placeholder {
+   color: #fff;
   }
 `;
 

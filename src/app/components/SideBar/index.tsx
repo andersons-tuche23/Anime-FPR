@@ -1,7 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { TfiMenuAlt } from "react-icons/tfi";
-import { SidebarContainer, MenuIcon, SidebarContent, MenuContainer, TextMenu, MenuLinks } from "./styles";
+import {
+  SidebarContainer,
+  MenuIcon,
+  SidebarContent,
+  MenuContainer,
+  TextMenu,
+  MenuLinks,
+} from "./styles";
 
 interface Category {
   id: string;
@@ -9,15 +16,10 @@ interface Category {
   attributes: {
     title: string;
     description: string;
-  };
-}
-
-interface Anime {
-  id: string;
-  type: string;
-  attributes: {
-    title: string;
-    description: string;
+    posterImage: {
+      tiny: string;
+      large: string;
+    };
   };
 }
 
@@ -25,11 +27,13 @@ interface ApiResponse<T> {
   data: T[];
 }
 
-export default function Sidebar() {
+interface SidebarProps {
+  onCategorySelect: (title: string) => void;
+}
+
+export default function Sidebar({ onCategorySelect }: SidebarProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [categories, setCategories] = useState<Category[] | null>(null);
-  const [animes, setAnimes] = useState<Anime[] | null>(null);
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const sidebarRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -56,13 +60,9 @@ export default function Sidebar() {
     setIsOpen(!isOpen);
   };
 
-  const handleCategoryClick = (categoryId: string) => {
-    console.log("Categoria ", categoryId);
-    setSelectedCategory(categoryId);
-    fetch(`https://kitsu.io/api/edge/anime?filter[categories]=${categoryId}`)
-      .then((response) => response.json())
-      .then((data: ApiResponse<Anime>) => setAnimes(data.data))
-      .catch((error) => console.error("Error fetching animes:", error));
+  const handleCategoryClick = (categoryId: string, categoryTitle: string) => {
+    onCategorySelect(categoryTitle);
+    setIsOpen(false);
   };
 
   return (
@@ -74,7 +74,7 @@ export default function Sidebar() {
       ) : (
         <MenuContainer>
           <TextMenu>
-            <TfiMenuAlt style={{ height: '25px', width: '30px' }} />
+            <TfiMenuAlt style={{ height: "25px", width: "30px" }} />
             <span>Categorias</span>
           </TextMenu>
           <FaTimes onClick={toggleSidebar} />
@@ -84,7 +84,10 @@ export default function Sidebar() {
         <MenuLinks>
           {categories &&
             categories.map((category) => (
-              <div key={category.id} onClick={() => handleCategoryClick(category.id)}>
+              <div
+                key={category.id}
+                onClick={() => handleCategoryClick(category.id, category.attributes.title)}
+              >
                 <p>{category.attributes.title}</p>
               </div>
             ))}
