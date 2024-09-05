@@ -13,16 +13,6 @@ export const ModalBackground = styled.div`
   z-index: 1000;
 `;
 
-export const ModalContainer = styled.div`
-  width: 905px;
-  height: 509px;
-  /* background-color: #fff; */
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  position: relative;
-`;
-
 export const CloseButton = styled.button`
   position: absolute;
   top: 10px;

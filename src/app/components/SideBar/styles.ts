@@ -1,3 +1,4 @@
+import { FaTimes } from "react-icons/fa";
 import styled from "styled-components";
 
 interface SidebarProps {
@@ -6,7 +7,7 @@ interface SidebarProps {
 
 export const SidebarContainer = styled.div<SidebarProps>`
   width: ${(props) => (props.isOpen ? "267px" : "70px")};
-  height: 110.125rem;
+  height: 100%;
   background-color: #f46d1b;
   color: #fff;
   display: flex;
@@ -15,7 +16,7 @@ export const SidebarContainer = styled.div<SidebarProps>`
   padding-top: 20px;
   position: absolute;
   transition: width 0.3s ease-in-out;
-  z-index: 1000;
+  z-index: 1;
 `;
 
 export const MenuIcon = styled.div`
@@ -33,6 +34,10 @@ export const MenuContainer = styled.div`
   display: flex;
   gap: 4rem;
   margin-right: 36px;
+`;
+
+export const StyledFaTimes = styled(FaTimes)`
+cursor: pointer;
 `;
 
 export const MenuLinks = styled.div`
@@ -57,11 +62,8 @@ export const TextMenu = styled.div`
 `;
 
 export const SidebarContent = styled.div<SidebarProps>`
-  width: 100%;
   display: ${(props) => (props.isOpen ? "flex" : "none")};
-  flex-direction: column;
-  align-items: center;
-  transition: display 0.3s ease-in-out;
+  transition: display 0.3s ease-in-out; 
 `;
 
 export const SidebarItem = styled.div`

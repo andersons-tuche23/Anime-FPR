@@ -8,7 +8,9 @@ import {
   CategoryTitle,
   FooterPrincipal,
   ImageContainer,
+  ImageContent,
   PaginationContainer,
+  DivPosition
 } from "./styles";
 import CustomFooter from "../components/CustomFooter";
 import CustomModal from "../components/CustomModal";
@@ -49,7 +51,7 @@ interface Attributes {
 export default function Categories() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const searchText = searchParams.get('view') || ''; 
+  const searchText = searchParams.get("view") || "";
   const [data, setData] = useState<Item[] | null>(null);
   const [links, setLinks] = useState<Links | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -121,7 +123,7 @@ export default function Categories() {
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value); 
+    setInputValue(e.target.value);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -130,22 +132,28 @@ export default function Categories() {
     }
   };
 
-
   return (
-    <>
+    <DivPosition>
       <Sidebar
         onCategorySelect={(title) => {
           router.push(`/categories?view=${encodeURIComponent(title)}`);
         }}
       />
       <BackgroundColor>
-        <CustomInput
-         value={inputValue}
-         onChange={handleInputChange}
-         onKeyDown={handleKeyDown}
-        />
+        <ImageContent>
+          <img
+            src="logoPages.png"
+            alt=""
+            style={{ cursor: "pointer" }}
+            onClick={() => router.push("/")}
+          />
+          <CustomInput
+            value={inputValue}
+            onChange={handleInputChange}
+            onKeyDown={handleKeyDown}
+          />
+        </ImageContent>
       </BackgroundColor>
-
       {searchText && (
         <CategoryTitle>
           <img src="/film.png" alt="image_film" />
@@ -176,7 +184,7 @@ export default function Categories() {
               <div>
                 <Link href={`/sinopes?animeId=${item.id}`} passHref>
                   <img
-                    src={item.attributes.posterImage.large}
+                    src={item.attributes.posterImage?.large}
                     alt={item.attributes.canonicalTitle}
                   />
                 </Link>
@@ -197,6 +205,6 @@ export default function Categories() {
       <FooterPrincipal>
         <CustomFooter onViewAllClick={handleViewAllClick} />
       </FooterPrincipal>
-    </>
+    </DivPosition>
   );
 }

@@ -11,9 +11,12 @@ import {
   ButtonContainer,
   ButtonContent,
   HeartImage,
+  ImageContent,
   StarImage,
-  Teste,
+  AnimeDetails,
   TubeButton,
+  Container,
+  FooterContainer,
 } from "./styles";
 import CustomFooter from "../components/CustomFooter";
 import CustomModal from "../components/CustomModal";
@@ -31,8 +34,8 @@ export default function Sinopes() {
   const [averageRating, setAverageRating] = useState<string | null>(null);
   const [ratingRank, setRatingRank] = useState<string | null>(null);
   const [popularityRank, setPopularityRank] = useState<string | null>(null);
-  const [search, setSearch] = useState<string>(""); 
-  const [searchText, setSearchText] = useState<string>(""); 
+  const [search, setSearch] = useState<string>("");
+  const [searchText, setSearchText] = useState<string>("");
 
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -83,7 +86,6 @@ export default function Sinopes() {
     setSearch(e.target.value);
   };
 
-  
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       setSearchText(search);
@@ -98,7 +100,7 @@ export default function Sinopes() {
 
     debounceTimeout.current = setTimeout(() => {
       setSearchText(search);
-    }, 500 ); 
+    }, 500);
 
     return () => {
       if (debounceTimeout.current) {
@@ -113,76 +115,88 @@ export default function Sinopes() {
 
   return (
     <>
-      <BackTransparent>
-        <Sidebar onCategorySelect={handleCategorySelect} />
-        <CustomInput
-          value={search}
-          onChange={handleSearchChange}
-          onKeyDown={handleKeyDown}
-        />
-        {bannerImage && (
-          <img
-            src={bannerImage}
-            alt="Anime Banner"
-            style={{
-              width: "100%",
-              height: "auto",
-              objectFit: "cover",
-              position: "absolute",
-              top: 0,
-              left: 0,
-              zIndex: -1,
-            }}
-          />
-        )}
-      </BackTransparent>
-      <div>
-        <Teste>
-          <ButtonContainer>
-            {posterImage && (
-              <img
-                src={posterImage}
-                alt="Anime Poster Large"
-                style={{
-                  width: "221px",
-                  height: "313px",
-                  objectFit: "cover",
-                }}
-              />
-            )}
-            <TubeButton onClick={handleOpenModal}>
-              <ButtonContent>
-                <img src="/button.png" alt="" />
-                VER TRAILER
-              </ButtonContent>
-            </TubeButton>
-            <AproveText>Aprovado {averageRating}% da comunidade</AproveText>
-            <HeartImage>
-              <img src="/heart.png" alt="" />
-              <p>#{popularityRank} Mais Popular</p>
-            </HeartImage>
-            <StarImage>
-              <img src="/star.png" alt="" />
-              <p>#{ratingRank} Melhor classificado</p>
-            </StarImage>
-          </ButtonContainer>
-          {showModal && youtubeVideoId && (
-            <CustomModal showModal={showModal} onClose={handleCloseModal}>
-              <iframe
-                width="800"
-                height="450"
-                src={`https://www.youtube.com/embed/${youtubeVideoId}`}
-                title="YouTube Video"
-              ></iframe>
-            </CustomModal>
+      <Container>
+        <BackTransparent>
+          <Sidebar onCategorySelect={handleCategorySelect} />
+          <ImageContent>
+            <img
+              src="logoPages.png"
+              alt=""
+              style={{ cursor: "pointer" }}
+              onClick={() => router.push("/")}
+            />
+            <CustomInput
+              value={search}
+              onChange={handleSearchChange}
+              onKeyDown={handleKeyDown}
+            />
+          </ImageContent>
+          {bannerImage && (
+            <img
+              src={bannerImage}
+              alt="Anime Banner"
+              style={{
+                width: "100%",
+                height: "auto",
+                objectFit: "cover",
+                position: "absolute",
+                top: 0,
+                left: 0,
+                zIndex: -1,
+              }}
+            />
           )}
-          <div>
-            <h1>{canonicalTitle}</h1>
-            <p style={{ width: "855px", height: "50px" }}>{synopsis}</p>
-          </div>
-        </Teste>
-        <CustomFooter onViewAllClick={() => {}} />
-      </div>
+        </BackTransparent>
+        <div>
+          <AnimeDetails>
+            <ButtonContainer>
+              {posterImage && (
+                <img
+                  src={posterImage}
+                  alt="Anime Poster Large"
+                  style={{
+                    width: "221px",
+                    height: "313px",
+                    objectFit: "cover",
+                  }}
+                />
+              )}
+              <TubeButton onClick={handleOpenModal}>
+                <ButtonContent>
+                  <img src="/button.png" alt="" />
+                  VER TRAILER
+                </ButtonContent>
+              </TubeButton>
+              <AproveText>Aprovado {averageRating}% da comunidade</AproveText>
+              <HeartImage>
+                <img src="/heart.png" alt="" />
+                <p>#{popularityRank} Mais Popular</p>
+              </HeartImage>
+              <StarImage>
+                <img src="/star.png" alt="" />
+                <p>#{ratingRank} Melhor classificado</p>
+              </StarImage>
+            </ButtonContainer>
+            {showModal && youtubeVideoId && (
+              <CustomModal showModal={showModal} onClose={handleCloseModal}>
+                <iframe
+                  width="800"
+                  height="450"
+                  src={`https://www.youtube.com/embed/${youtubeVideoId}`}
+                  title="YouTube Video"
+                ></iframe>
+              </CustomModal>
+            )}
+            <div>
+              <h1>{canonicalTitle}</h1>
+              <p style={{ width: "855px", height: "50px" }}>{synopsis}</p>
+            </div>
+          </AnimeDetails>
+          <FooterContainer>
+            <CustomFooter onViewAllClick={() => {}} />
+          </FooterContainer>
+        </div>
+      </Container>
     </>
   );
 }

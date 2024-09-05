@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import React from "react";
 import { ButtonFooter, Footer, FooterContent, TextContainer, TextFooter } from "./styles";
 import Link from "next/link";

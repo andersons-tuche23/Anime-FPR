@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import React from "react";
-import { Input, InputContainer } from "./styles";
+import { Input } from "./styles";
 
 interface CustomInputProps {
   value: string;
@@ -10,8 +10,7 @@ interface CustomInputProps {
 
 const CustomInput: React.FC<CustomInputProps> = ({ value, onChange, onKeyDown }) => {
   return (
-    <InputContainer>
-      <img src="./logo.png" alt="" />
+    <div>
       <Input
         type="text"
         placeholder="Buscar"
@@ -19,7 +18,7 @@ const CustomInput: React.FC<CustomInputProps> = ({ value, onChange, onKeyDown })
         onChange={onChange}
         onKeyDown={onKeyDown}
       />
-    </InputContainer>
+    </div>
   );
 };
 

@@ -8,6 +8,7 @@ import {
   MenuContainer,
   TextMenu,
   MenuLinks,
+  StyledFaTimes,
 } from "./styles";
 
 interface Category {
@@ -77,7 +78,7 @@ export default function Sidebar({ onCategorySelect }: SidebarProps) {
             <TfiMenuAlt style={{ height: "25px", width: "30px" }} />
             <span>Categorias</span>
           </TextMenu>
-          <FaTimes onClick={toggleSidebar} />
+          <StyledFaTimes onClick={toggleSidebar} />
         </MenuContainer>
       )}
       <SidebarContent isOpen={isOpen}>

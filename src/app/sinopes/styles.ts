@@ -1,7 +1,22 @@
 import styled from "styled-components";
 
+export const Container = styled.div`
+position: relative;
+`;
+
 export const BackTransparent = styled.div`
   background: #000000cc;
+  height: 102px;
+`;
+
+export const ImageContent = styled.div`
+display: flex;
+justify-content: space-between;
+width: 95%;
+
+img{
+  margin-left: 5rem;
+}
 `;
 
 export const TubeButton = styled.button`
@@ -14,7 +29,7 @@ export const TubeButton = styled.button`
   border: none;
 `;
 
-export const Teste = styled.div`
+export const AnimeDetails = styled.div`
   display: flex;
   align-items: center;
   margin-top: 12rem;
@@ -61,4 +76,8 @@ p{
   font-size: 16px;
   font-weight: 500;
 }
+`;
+
+export const FooterContainer = styled.div`
+margin-top: 10rem;
 `;

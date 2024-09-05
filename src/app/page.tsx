@@ -7,6 +7,7 @@ import {
   CaroselContainer,
   Container,
   FooterContainer,
+  ImageContent,
   ItemContainer,
   SubTitle,
   SubTitleFooter,
@@ -45,6 +46,7 @@ export default function Home() {
   const [data, setData] = useState<Item[] | null>(null);
   const [topRatedData, setTopRatedData] = useState<Item[] | null>(null);
   const [inputText, setInputText] = useState("");
+  const [searchText, setSearchText] = useState("");
   const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
   const router = useRouter();
 
@@ -72,9 +74,7 @@ export default function Home() {
     }
 
     debounceTimeout.current = setTimeout(() => {
-      if (inputText) {
-        router.push(`/categories?view=${encodeURIComponent(inputText)}`);
-      }
+      setSearchText(inputText);
     }, 700);
 
     return () => {
@@ -82,26 +82,35 @@ export default function Home() {
         clearTimeout(debounceTimeout.current);
       }
     };
-  }, [inputText, router]);
+  }, [inputText]);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setInputText(e.target.value);
   };
 
-  const handleViewAllClick = () => {
-    console.log("View All button clicked!");
-    // Add any additional logic here if needed
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      setSearchText(inputText);
+      router.push(`/categories?view=${encodeURIComponent(inputText)}`);
+    }
+  };
+
+  const handleCategorySelect = (title: string) => {
+    router.push(`/categories?view=${encodeURIComponent(title)}`);
   };
 
   return (
     <Container>
-      <Sidebar
-        onCategorySelect={function (title: string): void {
-          throw new Error("Function not implemented.");
-        }}
-      />
+      <Sidebar onCategorySelect={handleCategorySelect} />
       <Background>
-        <CustomInput value={inputText} onChange={handleInputChange} />
+        <ImageContent>
+          <img src="./logo.png" alt="" />
+          <CustomInput
+            value={inputText}
+            onChange={handleInputChange}
+            onKeyDown={handleKeyDown}
+          />
+        </ImageContent>
       </Background>
       <SubTitle>
         <CiStar style={{ color: "#F46D1B" }} />
@@ -162,7 +171,7 @@ export default function Home() {
           ))}
       </ItemContainer>
       <FooterContainer>
-        <CustomFooter onViewAllClick={handleViewAllClick} />
+        <CustomFooter onViewAllClick={()=>{}} />
       </FooterContainer>
     </Container>
   );

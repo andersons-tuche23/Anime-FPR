@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { ModalBackground, ModalContainer, CloseButton, ModalContent } from "./styles";
+import { ModalBackground,  CloseButton, ModalContent } from "./styles";
 
 type ModalProps = {
   showModal: boolean;
@@ -24,10 +24,8 @@ export default function CustomModal({ showModal, onClose, children }: ModalProps
 
   return (
     <ModalBackground onClick={handleBackgroundClick}>
-      <ModalContainer>
         <CloseButton onClick={onClose}>&times;</CloseButton>
         <ModalContent>{children}</ModalContent>
-      </ModalContainer>
     </ModalBackground>
   );
 }

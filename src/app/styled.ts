@@ -3,6 +3,7 @@ import styled from "styled-components";
 export const Container = styled.div`
 display: flex;
 flex-direction: column;
+position: relative;
 `;
 export const Background = styled.div`
   background-image: url(${"./banner.png"});
@@ -10,6 +11,16 @@ export const Background = styled.div`
   height: 29rem;
   background-size: cover;
   width: 100%;
+`;
+
+export const ImageContent = styled.div`
+display: flex;
+justify-content: space-between;
+width: 95%;
+
+img{
+  margin-left: 5rem;
+}
 `;
 
 
@@ -31,7 +42,7 @@ export const SubTitle = styled.h1`
   font-size: 2rem;
   display: flex;
   align-items: center;
-  margin-left: 10rem;
+  margin-left: 10.5rem;
   gap: 5px;
   margin-top: 40px;
 
@@ -48,7 +59,7 @@ export const SubTitleFooter = styled.h2`
   font-size: 2rem;
   display: flex;
   align-items: center;
-  margin-left: 10rem;
+  margin-left: 11rem;
   gap: 5px;
   margin-top: 40px;
 

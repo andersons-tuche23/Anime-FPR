@@ -2,12 +2,26 @@ import styled from "styled-components";
 
 export const BackgroundColor = styled.div`
   background-color: black;
+  height: 102px;
 `;
+
+export const ImageContent = styled.div`
+display: flex;
+justify-content: space-between;
+width: 95%;
+
+img{
+  margin-left: 5rem;
+}
+`;
+
+export const DivPosition = styled.div `
+position: relative;`
 
 export const CategoryTitle = styled.div`
   display: flex;
   gap: 5px;
-  margin-left: 9rem;
+  margin-left: 12rem;
   align-items: center;
   margin-top: 3rem;
 
@@ -43,7 +57,7 @@ export const ImageContainer = styled.div`
 export const PaginationContainer = styled.div`
   display: flex;
   justify-content: flex-end;
-  margin-right: 2rem;
+  margin-right: 7rem;
   margin-top: 1rem;
 
   button {
