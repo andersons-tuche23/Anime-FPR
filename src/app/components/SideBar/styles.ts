@@ -7,7 +7,7 @@ interface SidebarProps {
 
 export const SidebarContainer = styled.div<SidebarProps>`
   width: ${(props) => (props.isOpen ? "267px" : "70px")};
-  height: 100%;
+  height: ${(props) => (props.isOpen ? "100%" : "calc(100% - 288px)")}; 
   background-color: #f46d1b;
   color: #fff;
   display: flex;
@@ -15,7 +15,7 @@ export const SidebarContainer = styled.div<SidebarProps>`
   align-items: center;
   padding-top: 20px;
   position: absolute;
-  transition: width 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
   z-index: 1;
 `;
 
