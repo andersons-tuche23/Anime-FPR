@@ -77,5 +77,5 @@ export const CaroselContainer = styled.div`
 `;
 
 export const FooterContainer = styled.div`
-margin-top: 5rem;
+margin-top: 10rem;
 `;
