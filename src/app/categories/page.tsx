@@ -154,12 +154,12 @@ export default function Categories() {
           />
         </ImageContent>
       </BackgroundColor>
-      {searchText && (
+     
         <CategoryTitle>
           <img src="/film.png" alt="image_film" />
-          <h2>{searchText}</h2>
+          <h2>{searchText ? searchText : "Todos os Animes"}</h2>
         </CategoryTitle>
-      )}
+    
 
       {showModal && isLoading && (
         <CustomModal showModal={showModal} onClose={() => setShowModal(false)}>
