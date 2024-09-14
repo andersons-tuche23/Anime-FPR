@@ -21,7 +21,7 @@ position: relative;`
 export const CategoryTitle = styled.div`
   display: flex;
   gap: 5px;
-  margin-left: 12rem;
+  margin-left: 12.5rem;
   align-items: center;
   margin-top: 3rem;
 

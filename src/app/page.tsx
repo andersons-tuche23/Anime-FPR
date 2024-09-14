@@ -19,6 +19,7 @@ import { CiStar } from "react-icons/ci";
 import CustomFooter from "./components/CustomFooter";
 import CustomTooltip from "./components/CustomTooltip";
 import CustomInput from "./components/CustomInput";
+import Link from "next/link";
 
 interface PosterImage {
   large: string;
@@ -131,10 +132,12 @@ export default function Home() {
                 synopsis={item.attributes.synopsis}
               >
                 <div>
+                  <Link href={`/sinopes?animeId=${item.id}`} passHref>
                   <img
                     src={item.attributes.posterImage.large}
                     alt={item.attributes.canonicalTitle}
                   />
+                  </Link>
                 </div>
               </CustomTooltip>
             ))}
@@ -162,10 +165,12 @@ export default function Home() {
               synopsis={item.attributes.synopsis}
             >
               <div>
+                <Link href={`/sinopes?animeId=${item.id}`} passHref>
                 <img
                   src={item.attributes.posterImage.large}
                   alt={item.attributes.canonicalTitle}
                 />
+                </Link>
               </div>
             </CustomTooltip>
           ))}
